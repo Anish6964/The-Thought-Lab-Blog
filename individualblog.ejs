@@ -1,0 +1,18 @@
+<%- include('header.ejs') %>
+
+<div id="Projects">
+    <article id="project1">
+
+        <% if (blogpostview && blogpostview.title) { %>
+            <h1><%= blogpostview.title %></h1>
+        <% } %>
+        
+        <% if (blogpostview && blogpostview.description) { %>
+            <p><%= blogpostview.description %></p>
+        <% } %>
+        
+
+</article>
+</div>
+
+<%- include('footer.ejs') %>
