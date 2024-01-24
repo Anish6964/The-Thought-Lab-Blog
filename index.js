@@ -4,59 +4,17 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import bodyParser from "body-parser"
 const __dirname = dirname(fileURLToPath(import.meta.url));
-
+import { Post } from './Server/Models/post.js';
+import methodOverride from 'method-override';
 
 const app = express();
 const port = 3000;
 connectDB(); //connect to database
 
+app.use(methodOverride('_method')); 
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
-
-
-
-let blogs = [{
-  id: "1",
-
-  title: 'GPG Data Ingestion Solution',
-
-  description : `Description: Developed a solution to seamlessly ingest data from GPG encrypted Zip files and facilitate data storage and retrieval.
-
-  Role: Developer
-  
-  Language: Python
-  
-  Tools Used: AWS S3,EC2,Lambda`,
-},
-{ 
-  id: "2",
-
-title: 'IoT Based Home Security Status Monitoring System Using Blynk',
-
-description: `Description: This system works by monitoring the activity of the main door or windows as soon as the system detects that the door is opened or being tampered with, the user instantly gets a notification on his/her phone through the Blynk App notifying that the door has been opened so that we can act very swiftly to the situation.
-
-Role: Team Leader
-
-Language: C Language
-
-Tools Used: Arduino IDE, Blynk IoT, Node MCU Board`
-
-},
-{
-  id: "3",
-
-title: `Triple Band Dual Ring Antenna for Wearable Applications`,
-
-description: `Description: In this project our main aim is to design a Triple-band open-ring high-gain high-efficiency antenna for 2.45/3.0/3.45 GHz wearable applications. The proposed antenna operates at 2.45 GHz for Industrial Specific, and Medical (ISM) applications, 3.0 GHz for military applications, and 3.45 GHz for Worldwide Interoperability for Microwave Access (WiMAX) applications.
-
-Role: Team Leader
-
-Tools Used: Ansys HFSS`
-
-}];
-
-let blogtoView;
 
 app.get("/", (req, res) => {                        ///HOME PAGE
     res.render("index.ejs");
@@ -72,37 +30,88 @@ app.get("/about", (req, res) => {                       /// ABOUT PAGE
  });
 
 
-app.get("/all-blogs" , (req,res) => {                        /// VIEW ALL BLOGS PAGE
-  res.render("blogposts.ejs", {blog : blogs});
+app.get("/all-blogs" , async (req,res) => {  
+  try {
+    const data = await Post.find();
+    res.render("blogposts.ejs", {blog : data});
+  } catch (error) {
+    console.log(error);
+  }
+                                                                                      
 });
 
 
-app.post("/submit-blog" , (req,res) => {                          ///after writing submit post
+app.post("/submit-blog", async (req, res) => {
+  const newPost = new Post({
+    title: req.body.title,
+    body: req.body.description, // Assuming you have a 'body' field in your schema
+    // Add other fields as necessary
+  });
 
-  const newPost = {
-    title : req.body.title,
-    description : req.body.description,
-
-  }
-    blogs.push(newPost);
+  try {
+    await newPost.save();
     res.redirect("/all-blogs");
-})
-
-app.get("/read-blog", (req,res) => {
-
-  const blogSelected = parseInt(req.query.id, 10) - 1;
-
-  if (blogSelected){
-    blogtoView = blogs[blogSelected];
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Error occurred');
   }
-  res.render("individualblog.ejs" , {blogpostview : blogtoView});
-})
+});
 
 
 
-app.delete("/delete-post" , (req,res) => {
+  app.get("/post/:id", async (req, res) => {
+    try {
+      const postId = req.params.id;
+      const data = await Post.findById(postId); // Just pass the postId
+      res.render("individualblog.ejs", { data });
+    } catch (error) {
+      console.log(error);
+      // Optionally, send a response indicating an error occurred
+      res.status(500).send('Error occurred');
+    }
+  });
+
+
+
+  app.delete("/delete-post/:id", async (req, res) => {
+    try {
+      await Post.findByIdAndDelete(req.params.id);
+      res.redirect("/all-blogs");
+      
+    } catch (error) {
+      console.log(error);
+      res.status(500).send('Error occurred');
+    }
+  });
+
+  app.get("/edit-post/:id", async (req, res) => {
+    try {
+      const post = await Post.findById(req.params.id);
+      res.render("editpost.ejs", { data: post });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Error occurred");
+    }
+  });
   
-})
+  
+  app.post("/update-post/:id", async (req, res) => {
+  try {
+    
+    await Post.findByIdAndUpdate(req.params.id, {
+      title: req.body.title,
+      body: req.body.body,
+      updatedAt: Date.now()  // If you have an updatedAt field
+    });
+    res.redirect("/all-blogs"); // Redirect to the list of all blog posts
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Error occurred");
+  }
+});
+
+
 
 
 app.listen(port, () => {                                      /// PORT LISTENER
