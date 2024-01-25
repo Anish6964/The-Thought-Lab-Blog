@@ -1,82 +1,60 @@
-body, html {
-font-family: 'Oswald', sans-serif;
-scroll-behavior: smooth;
-margin: 0;
-
-
-
+body,
+html {
+  font-family: "Oswald", sans-serif;
+  scroll-behavior: smooth;
+  margin: 0;
 }
 
+#Aboutme {
+  padding: 200px 0px 200px 0px;
+  background: rgb(33, 37, 41);
 
-
-#Aboutme
-{
-padding:200px 0px 200px 0px;
-background:rgb(33,37,41);
-
-color:#fff;
+  color: #fff;
 }
 
-#aboutme
-{
-text-align:center;
-
+#aboutme {
+  text-align: center;
 }
 
-
-#aboutmedesc{
-text-align:center;
-padding:30px;
-
+#aboutmedesc {
+  text-align: center;
+  padding: 30px;
 }
 
-
-#project2
-{
-padding:20px 10px 50px 10px;
-background:#e7e7e7;
-margin-left: auto;
-margin-right: auto;
-width: 90%;
+#project2 {
+  padding: 20px 10px 50px 10px;
+  background: #e7e7e7;
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
 }
 
-#project1
-{
-padding:20px 10px 50px 10px;
-margin-left: auto;
-margin-right: auto;
-width: 90%;
-
+#project1 {
+  padding: 20px 10px 50px 10px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
 }
 
-#project3
-{
-padding:20px 10px 50px 10px;
-margin-left: auto;
-margin-right: auto;
-width: 90%;
-
+#project3 {
+  padding: 20px 10px 50px 10px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
 }
 
-
-
-
-
-#headerpro{
-margin-top: 20px;
-margin-bottom:0px;
-text-align:center;
-font-weight:bold;
-text-decoration:underline;
+#headerpro {
+  margin-top: 20px;
+  margin-bottom: 0px;
+  text-align: center;
+  font-weight: bold;
+  text-decoration: underline;
 }
-
-
 
 .button-wrapper {
-display: flex;
-justify-content: center; /* Center horizontally */
-align-items: center; /* Center vertically if needed */
-
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically if needed */
 }
 
 /* Grid for the main content area */
@@ -89,14 +67,14 @@ align-items: center; /* Center vertically if needed */
 /* Responsive design adjustments */
 @media only screen and (max-width: 768px) {
   nav ul {
-      flex-direction: column;
+    flex-direction: column;
   }
 
   .main-content {
-      grid-template-columns: 1fr; /* Stack the content on small screens */
+    grid-template-columns: 1fr; /* Stack the content on small screens */
   }
 
   body {
-      font-size: 14px; /* Smaller font size on small screens */
+    font-size: 14px; /* Smaller font size on small screens */
   }
 }
